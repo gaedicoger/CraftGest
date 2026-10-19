@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: craftgest
+  datasource:
+    url: jdbc:postgresql://localhost:5433/craftgest_db
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  config:
+    import: optional:file:.env[.properties]
