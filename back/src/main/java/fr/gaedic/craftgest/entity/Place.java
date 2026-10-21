@@ -5,16 +5,26 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="types")
-public class Type {
+@Table(name="places")
+public class Place {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String name;
 
-    @JoinColumn(name="user_id", nullable = false)
+    @Column (nullable = false)
+    private String type;
+
+    @Column (nullable = false)
+    private Integer discountRate;
+
+    @Column (nullable = false)
+    private Integer commissionRate;
+
+    @JoinColumn (name="user_id", nullable = false)
     @ManyToOne
     private User user;
 
@@ -24,7 +34,7 @@ public class Type {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    public Type() {}
+    public Place() {}
 
     public Integer getId() {
         return id;
@@ -40,6 +50,30 @@ public class Type {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Integer getDiscountRate() {
+        return discountRate;
+    }
+
+    public void setDiscountRate(Integer discountRate) {
+        this.discountRate = discountRate;
+    }
+
+    public Integer getCommissionRate() {
+        return commissionRate;
+    }
+
+    public void setCommissionRate(Integer commissionRate) {
+        this.commissionRate = commissionRate;
     }
 
     public User getUser() {

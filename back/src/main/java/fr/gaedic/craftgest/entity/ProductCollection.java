@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name="collections")
-public class Collection {
+public class ProductCollection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -24,7 +24,7 @@ public class Collection {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    public Collection() {}
+    public ProductCollection() {}
 
     public Integer getId() {
         return id;
