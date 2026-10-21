@@ -18,10 +18,10 @@ public class Place {
     @Column (nullable = false)
     private String type;
 
-    @Column (nullable = false)
+    @Column
     private Integer discountRate;
 
-    @Column (nullable = false)
+    @Column
     private Integer commissionRate;
 
     @JoinColumn (name="user_id", nullable = false)
