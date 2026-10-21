@@ -22,13 +22,13 @@ public class Event {
     @Column (nullable = false)
     private LocalDate dateBeginning;
 
-    @Column (nullable = false)
+    @Column
     private LocalDate dateEnd;
 
     @Column (nullable = false)
     private String status;
 
-    @Column
+    @Column (precision = 10, scale = 2)
     private BigDecimal fees;
 
     @Column
@@ -39,6 +39,7 @@ public class Event {
     private User user;
 
     @JoinColumn (name="place_id", nullable = false)
+    @ManyToOne
     private Place place;
 
     @Column(nullable = false)
