@@ -18,7 +18,7 @@ public class Product {
     @Column
     private String codeRef;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column (nullable = false, precision = 10, scale = 2)
@@ -45,15 +45,15 @@ public class Product {
 
     @JoinColumn (name="type_id", nullable = false)
     @ManyToOne
-    private ProductType ProductType;
+    private ProductType productType;
 
-    @JoinColumn (name="collection_id", nullable = false)
+    @JoinColumn (name="collection_id")
     @ManyToOne
-    private ProductCollection ProductCollection;
+    private ProductCollection productCollection;
 
-    @JoinColumn (name="finding_id", nullable = false)
+    @JoinColumn (name="finding_id")
     @ManyToOne
-    private Finding Finding;
+    private Finding finding;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -152,27 +152,27 @@ public class Product {
     }
 
     public ProductType getProductType() {
-        return ProductType;
+        return productType;
     }
 
     public void setProductType(ProductType productType) {
-        ProductType = productType;
+        this.productType = productType;
     }
 
     public ProductCollection getProductCollection() {
-        return ProductCollection;
+        return productCollection;
     }
 
     public void setProductCollection(ProductCollection productCollection) {
-        ProductCollection = productCollection;
+        this.productCollection = productCollection;
     }
 
     public Finding getFinding() {
-        return Finding;
+        return finding;
     }
 
     public void setFinding(Finding finding) {
-        Finding = finding;
+        this.finding = finding;
     }
 
     public LocalDateTime getCreatedAt() {
