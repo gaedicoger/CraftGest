@@ -47,7 +47,7 @@ public class Event {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    public Place() {}
+    public Event() {}
 
     public Integer getId() {
         return id;
