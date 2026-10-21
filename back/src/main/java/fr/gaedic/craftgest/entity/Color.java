@@ -15,7 +15,9 @@ public class Color {
 
     @Column(nullable = false)
     private String name;
-
+    //Attention ici on change d'annotation pour les clés étrangères.
+    // On fait une "jointure" on rappelle le nom de la colonne de la table
+    //Puis on indique l'annotation many to one, plusieurs couleurs pour un utilisateur
     @JoinColumn(name="user_id", nullable = false)
     @ManyToOne
     private User user;
