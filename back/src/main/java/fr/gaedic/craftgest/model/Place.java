@@ -1,37 +1,23 @@
-package fr.gaedic.craftgest.entity;
-
-import jakarta.persistence.*;
+package fr.gaedic.craftgest.model;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name="places")
 public class Place {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column (nullable = false)
     private String name;
 
-    @Column (nullable = false)
     private String type;
 
-    @Column
     private Integer discountRate;
 
-    @Column
     private Integer commissionRate;
 
-    @JoinColumn (name="user_id", nullable = false)
-    @ManyToOne
-    private User user;
+    private Integer userId;
 
-    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     public Place() {}
@@ -76,12 +62,12 @@ public class Place {
         this.commissionRate = commissionRate;
     }
 
-    public User getUser() {
-        return user;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public LocalDateTime getCreatedAt() {

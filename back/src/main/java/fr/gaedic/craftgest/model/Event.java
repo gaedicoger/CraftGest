@@ -1,51 +1,32 @@
-package fr.gaedic.craftgest.entity;
-
-import jakarta.persistence.*;
+package fr.gaedic.craftgest.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name="events")
 public class Event {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column (nullable = false)
     private String name;
 
-    @Column (nullable = false)
     private String type;
 
-    @Column (nullable = false)
     private LocalDate dateBeginning;
 
-    @Column
     private LocalDate dateEnd;
 
-    @Column (nullable = false)
     private String status;
 
-    @Column (precision = 10, scale = 2)
     private BigDecimal fees;
 
-    @Column
     private Integer commissionRate;
 
-    @JoinColumn (name="user_id", nullable = false)
-    @ManyToOne
-    private User user;
+    private Integer userId;
 
-    @JoinColumn (name="place_id", nullable = false)
-    @ManyToOne
-    private Place place;
+    private Integer placeId;
 
-    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     public Event() {}
@@ -114,20 +95,20 @@ public class Event {
         this.commissionRate = commissionRate;
     }
 
-    public User getUser() {
-        return user;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public Place getPlace() {
-        return place;
+    public Integer getPlaceId() {
+        return placeId;
     }
 
-    public void setPlace(Place place) {
-        this.place = place;
+    public void setPlaceId(Integer placeId) {
+        this.placeId = placeId;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -1,41 +1,25 @@
-package fr.gaedic.craftgest.entity;
-
-import jakarta.persistence.*;
+package fr.gaedic.craftgest.model;
 
 import java.time.LocalDateTime;
 
-// Entité JPA : cette classe représente la table "users".
-// Hibernate s'en sert pour lire et écrire les utilisateurs en base.
-@Entity
-@Table(name="users")
+// Modèle : cette classe représente la table "users".
+// Le repository (JDBC) la remplit avec les lignes lues en base.
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
     private String pseudo;
-    @Column(nullable = false, unique=true )
     private String mail;
-    @Column(nullable = false)
     private String passwordHash;
-    @Column(nullable = false)
     private String business;
-    @Column(nullable = false, unique = true)
     private String slug;
-    @Column(nullable = false)
     private String role;
-    @Column(nullable = false)
     private String status;
-    @Column(nullable = false)
     private Boolean mailVerified;
-    @Column(nullable = false)
     private LocalDateTime createdAt;
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     //Constructeur : Permet de créer un objet user.
-    // JPA l'utilise pour créer un ojbet user pour chaque ligne de la table
+    // Le repository l'utilisera pour créer un objet user pour chaque ligne lue en base
     public User() {}
 
     //Getters et setters : Les attribuent de ma classe sont privés, ça permet d'avoir des accès contrôlés

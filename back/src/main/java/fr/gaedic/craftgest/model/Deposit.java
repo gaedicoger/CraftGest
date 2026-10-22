@@ -1,32 +1,18 @@
-package fr.gaedic.craftgest.entity;
-
-import jakarta.persistence.*;
+package fr.gaedic.craftgest.model;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name="deposits",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"event_id", "product_id"}))
 public class Deposit {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JoinColumn(name="event_id", nullable = false)
-    @ManyToOne
-    private Event event;
+    private Integer eventId;
 
-    @JoinColumn(name="product_id", nullable = false)
-    @ManyToOne
-    private Product product;
+    private Integer productId;
 
-    @Column(nullable = false)
     private Integer quantityDeposited;
 
-    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     public Deposit() {}
@@ -39,20 +25,20 @@ public class Deposit {
         this.id = id;
     }
 
-    public Event getEvent() {
-        return event;
+    public Integer getEventId() {
+        return eventId;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setEventId(Integer eventId) {
+        this.eventId = eventId;
     }
 
-    public Product getProduct() {
-        return product;
+    public Integer getProductId() {
+        return productId;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 
     public Integer getQuantityDeposited() {

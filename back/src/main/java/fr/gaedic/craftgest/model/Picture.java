@@ -1,30 +1,18 @@
-package fr.gaedic.craftgest.entity;
-
-import jakarta.persistence.*;
+package fr.gaedic.craftgest.model;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name="pictures")
 public class Picture {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
     private String url;
 
-    @Column(nullable = false)
     private Integer position;
 
-    @JoinColumn(name="product_id", nullable = false)
-    @ManyToOne
-    private Product product;
+    private Integer productId;
 
-    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     public Picture() {}
@@ -53,12 +41,12 @@ public class Picture {
         this.position = position;
     }
 
-    public Product getProduct() {
-        return product;
+    public Integer getProductId() {
+        return productId;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 
     public LocalDateTime getCreatedAt() {

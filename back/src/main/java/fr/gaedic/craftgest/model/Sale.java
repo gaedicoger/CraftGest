@@ -1,45 +1,28 @@
-package fr.gaedic.craftgest.entity;
-
-import jakarta.persistence.*;
+package fr.gaedic.craftgest.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name="sales")
 public class Sale {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
     private LocalDate saleDate;
 
-    @Column(nullable = false)
     private Integer quantity;
 
-    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal pricePaid;
 
-    @Column(nullable = false, precision = 10, scale =2)
     private BigDecimal priceCatalog;
 
-    @Column(nullable = false)
     private String paidType;
 
-    @JoinColumn(name="event_id", nullable = false)
-    @ManyToOne
-    private Event event;
+    private Integer eventId;
 
-    @JoinColumn(name="product_id", nullable = false)
-    @ManyToOne
-    private Product product;
+    private Integer productId;
 
-    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     public Sale() {}
@@ -92,20 +75,20 @@ public class Sale {
         this.paidType = paidType;
     }
 
-    public Event getEvent() {
-        return event;
+    public Integer getEventId() {
+        return eventId;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setEventId(Integer eventId) {
+        this.eventId = eventId;
     }
 
-    public Product getProduct() {
-        return product;
+    public Integer getProductId() {
+        return productId;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 
     public LocalDateTime getCreatedAt() {

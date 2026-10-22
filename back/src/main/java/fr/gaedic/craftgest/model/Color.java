@@ -1,35 +1,22 @@
-package fr.gaedic.craftgest.entity;
-
-import jakarta.persistence.*;
+package fr.gaedic.craftgest.model;
 
 import java.time.LocalDateTime;
 
-// Entité JPA : cette classe représente la table "colors".
-// Hibernate s'en sert pour lire et écrire les couleurs en base.
-@Entity
-@Table(name="colors")
+// Modèle : cette classe représente la table "colors".
+// Le repository (JDBC) la remplit avec les lignes lues en base.
 public class Color {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
     private String name;
-    //Attention ici on change d'annotation pour les clés étrangères.
-    // On fait une "jointure" on rappelle le nom de la colonne de la table
-    //Puis on indique l'annotation many to one, plusieurs couleurs pour un utilisateur
-    @JoinColumn(name="user_id", nullable = false)
-    @ManyToOne
-    private User user;
+    // Clé étrangère : on stocke seulement l'id de l'utilisateur (colonne user_id)
+    private Integer userId;
 
-    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     //Constructeur : Permet de créer un objet color.
-    // JPA l'utilise pour créer un objet color pour chaque ligne de la table
+    // Le repository l'utilisera pour créer un objet color pour chaque ligne lue en base
     public Color() {}
 
     //Getters et setters : Les attribuent de ma classe sont privés, ça permet d'avoir des accès contrôlés
@@ -53,12 +40,12 @@ public class Color {
         this.name = name;
     }
 
-    public User getUser() {
-        return user;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public LocalDateTime getCreatedAt() {
