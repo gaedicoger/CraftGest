@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="products")
@@ -61,8 +63,23 @@ public class Product {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    //Jointures avec les tables de liaisons :
+    @JoinTable(name="product_universes", joinColumns = @JoinColumn(name="product_id"), inverseJoinColumns = @JoinColumn(name="universe_id"))
+    @ManyToMany
+    private Set<Universe> universes = new HashSet<>();
+
+    @JoinTable(name="product_materials", joinColumns = @JoinColumn(name="product_id"), inverseJoinColumns = @JoinColumn(name="material_id"))
+    @ManyToMany
+    private Set<Material> materials = new HashSet<>();
+
+    @JoinTable(name="product_colors", joinColumns = @JoinColumn(name="product_id"), inverseJoinColumns = @JoinColumn(name="color_id"))
+    @ManyToMany
+    private Set<Color> colors = new HashSet<>();
+
+    //Constructeur vide:
     public Product() {}
 
+    //Getters et setters:
     public Integer getId() {
         return id;
     }
@@ -189,5 +206,31 @@ public class Product {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    //Getters et setters jointures:
+
+    public Set<Universe> getUniverses() {
+        return universes;
+    }
+
+    public void setUniverses(Set<Universe> universes) {
+        this.universes = universes;
+    }
+
+    public Set<Material> getMaterials() {
+        return materials;
+    }
+
+    public void setMaterials(Set<Material> materials) {
+        this.materials = materials;
+    }
+
+    public Set<Color> getColors() {
+        return colors;
+    }
+
+    public void setColors(Set<Color> colors) {
+        this.colors = colors;
     }
 }
