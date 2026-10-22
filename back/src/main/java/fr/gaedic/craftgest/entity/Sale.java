@@ -28,11 +28,13 @@ public class Sale {
     @Column(nullable = false)
     private String paidType;
 
-    @Column(nullable = false)
-    private Integer eventId;
+    @JoinColumn(name="event_id", nullable = false)
+    @ManyToOne
+    private Event event;
 
-    @Column(nullable = false)
-    private Integer productId;
+    @JoinColumn(name="product_id", nullable = false)
+    @ManyToOne
+    private Product product;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -90,20 +92,20 @@ public class Sale {
         this.paidType = paidType;
     }
 
-    public Integer getEventId() {
-        return eventId;
+    public Event getEvent() {
+        return event;
     }
 
-    public void setEventId(Integer eventId) {
-        this.eventId = eventId;
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
-    public Integer getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -17,8 +17,9 @@ public class Picture {
     @Column(nullable = false)
     private Integer position;
 
-    @Column(nullable = false)
-    private Integer product_id;
+    @JoinColumn(name="product_id", nullable = false)
+    @ManyToOne
+    private Product product;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -52,12 +53,12 @@ public class Picture {
         this.position = position;
     }
 
-    public Integer getProduct_id() {
-        return product_id;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProduct_id(Integer product_id) {
-        this.product_id = product_id;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public LocalDateTime getCreatedAt() {
