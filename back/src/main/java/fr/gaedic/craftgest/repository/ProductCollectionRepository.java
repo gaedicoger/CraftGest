@@ -87,27 +87,29 @@ public class ProductCollectionRepository {
     }
 
     //Update:
-    public int update(Integer id, ProductCollection productCollection) {
+    public int update(Integer id, Integer userId, ProductCollection productCollection) {
         return jdbcTemplate.update(
                 """
                 UPDATE collections
                 SET name = ?, updated_at =?
-                WHERE id = ?
+                WHERE id = ? AND user_id = ?
                 """,
                 productCollection.getName(),
                 Timestamp.valueOf(LocalDateTime.now()),
-                id
+                id,
+                userId
         );
     }
 
     //Delete:
-    public int deleteById(Integer id) {
+    public int deleteById(Integer id, Integer userId) {
         return jdbcTemplate.update(
                 """
                 DELETE FROM collections
-                WHERE id = ?
+                WHERE id = ? AND user_id = ?
                 """,
-                id
+                id,
+                userId
         );
     }
 }

@@ -87,27 +87,29 @@ public class FindingRepository {
     }
 
     //Update:
-    public int update(Integer id, Finding finding) {
+    public int update(Integer id, Integer userId, Finding finding) {
         return jdbcTemplate.update(
                 """
                 UPDATE findings
                 SET name = ?, updated_at =?
-                WHERE id = ?
+                WHERE id = ? AND user_id = ?
                 """,
                 finding.getName(),
                 Timestamp.valueOf(LocalDateTime.now()),
-                id
+                id,
+                userId
         );
     }
 
     //Delete:
-    public int deleteById(Integer id) {
+    public int deleteById(Integer id, Integer userId) {
         return jdbcTemplate.update(
                 """
                 DELETE FROM findings
-                WHERE id = ?
+                WHERE id = ? AND user_id = ?
                 """,
-                id
+                id,
+                userId
         );
     }
 }

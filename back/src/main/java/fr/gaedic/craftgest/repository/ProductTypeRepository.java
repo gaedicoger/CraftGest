@@ -87,27 +87,29 @@ public class ProductTypeRepository {
     }
 
     //Update:
-    public int update(Integer id, ProductType productType) {
+    public int update(Integer id, Integer userId, ProductType productType) {
         return jdbcTemplate.update(
                 """
                 UPDATE types
                 SET name = ?, updated_at =?
-                WHERE id = ?
+                WHERE id = ? AND user_id = ?
                 """,
                 productType.getName(),
                 Timestamp.valueOf(LocalDateTime.now()),
-                id
+                id,
+                userId
         );
     }
 
     //Delete:
-    public int deleteById(Integer id) {
+    public int deleteById(Integer id, Integer userId) {
         return jdbcTemplate.update(
                 """
                 DELETE FROM types
-                WHERE id = ?
+                WHERE id = ? AND user_id = ?
                 """,
-                id
+                id,
+                userId
         );
     }
 }

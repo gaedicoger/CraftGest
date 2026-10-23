@@ -86,25 +86,28 @@ public class ColorRepository {
         return color;                                     // l'objet complet, avec son id
     }
 
-    public int update(Integer id, Color color) {          // renvoie le nombre de lignes modifiées
+    public int update(Integer id, Integer userId, Color color) {          // renvoie le nombre de lignes modifiées
         return jdbcTemplate.update(
                 """
                 UPDATE colors
                 SET name = ?, updated_at = ?
-                WHERE id = ?
+                WHERE id = ? AND user_id = ?
                 """,
                 color.getName(),                           // 1er ?
                 Timestamp.valueOf(LocalDateTime.now()),    // 2e ?  : date de modification = maintenant
-                id                                         // 3e ?
+                id,
+                userId// 3e ?
         );
     }
-    public int deleteById(Integer id) {                   // renvoie le nombre de lignes supprimées
+    public int deleteById(Integer id, Integer userId) {                   // renvoie le nombre de lignes supprimées
         return jdbcTemplate.update(
                 """
                 DELETE FROM colors
-                WHERE id = ?
+                WHERE id = ? AND user_id = ?
                 """,
-                id
+                id,
+                userId
         );
     }
 }
+

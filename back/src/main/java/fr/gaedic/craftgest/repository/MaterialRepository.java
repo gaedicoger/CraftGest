@@ -87,28 +87,30 @@ public class MaterialRepository {
     }
 
     //Update:
-    public int update(Integer id, Material material) {
+    public int update(Integer id, Integer userId, Material material) {
         return jdbcTemplate.update(
                 """
                 UPDATE materials
                 SET name = ?, updated_at =?
-                WHERE id = ?
+                WHERE id = ? AND user_id = ?
                 """,
                 material.getName(),
                 Timestamp.valueOf(LocalDateTime.now()),
-                id
+                id,
+                userId
         );
     }
 
     //Delete:
 
-    public int deleteById(Integer id) {
+    public int deleteById(Integer id, Integer userId) {
         return jdbcTemplate.update(
                 """
                 DELETE FROM materials
-                WHERE id = ?
+                WHERE id = ? AND user_id = ?
                 """,
-                id
+                id,
+                userId
         );
     }
 }

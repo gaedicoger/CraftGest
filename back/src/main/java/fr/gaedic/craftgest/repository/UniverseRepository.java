@@ -87,27 +87,29 @@ public class UniverseRepository {
     }
 
     //Update:
-    public int update(Integer id, Universe universe) {
+    public int update(Integer id, Integer userId, Universe universe) {
         return jdbcTemplate.update(
                 """
                 UPDATE universes
                 SET name = ?, updated_at =?
-                WHERE id = ?
+                WHERE id = ? AND user_id = ?
                 """,
                 universe.getName(),
                 Timestamp.valueOf(LocalDateTime.now()),
-                id
+                id,
+                userId
         );
     }
 
     //Delete:
-    public int deleteById(Integer id) {
+    public int deleteById(Integer id, Integer userId) {
         return jdbcTemplate.update(
                 """
                 DELETE FROM universes
-                WHERE id = ?
+                WHERE id = ? AND user_id = ?
                 """,
-                id
+                id,
+                userId
         );
     }
 }
