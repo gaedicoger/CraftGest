@@ -36,6 +36,7 @@ public class PlaceRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    //Read :
     public List<Place> findByUserId(Integer userId) {
         return jdbcTemplate.query(
                 """
@@ -99,6 +100,9 @@ public class PlaceRepository {
                 WHERE id = ? AND user_id = ?
                 """,
                 place.getName(),
+                place.getType(),
+                place.getDiscountRate(),
+                place.getCommissionRate(),
                 Timestamp.valueOf(LocalDateTime.now()),
                 id,
                 userId
