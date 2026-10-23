@@ -61,7 +61,7 @@ public class EventRepository {
                     
                         SELECT id, name, type, date_beginning, date_end, status, fees, commission_rate, user_id, place_id, created_at, updated_at
                     FROM events
-                    WHERE id= ?
+                    WHERE id= ? AND user_id = ?
                     """,
                 eventRowMapper,
                 id,
@@ -108,7 +108,7 @@ public class EventRepository {
         return jdbcTemplate.update(
                 """
                     UPDATE events
-                    SET name = ?, type = ?, date_beginning = ?, date_end = ?, status = ?, fees = ?, commission_rate = ?, user_id = ?, place_id = ?, created_at = ?, updated_at = ?
+                    SET name = ?, type = ?, date_beginning = ?, date_end = ?, status = ?, fees = ?, commission_rate = ?, place_id = ?, updated_at = ?
                     WHERE id = ? AND user_id = ?
                     """,
                 event.getName(),
@@ -118,7 +118,6 @@ public class EventRepository {
                 event.getStatus(),
                 event.getFees(),
                 event.getCommissionRate(),
-                event.getUserId(),
                 event.getPlaceId(),
                 Timestamp.valueOf(LocalDateTime.now()),
                 id,
