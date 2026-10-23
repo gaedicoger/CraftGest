@@ -37,7 +37,7 @@ public class UniverseRepository {
                 SELECT id, name, user_id, created_at, updated_at
                 FROM universes
                 WHERE user_id = ?
-                ORDERBY name
+                ORDER BY name
                 """,
                 universeRowMapper,
                 userId

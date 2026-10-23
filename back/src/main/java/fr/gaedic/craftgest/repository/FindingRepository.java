@@ -37,7 +37,7 @@ public class FindingRepository {
                 SELECT id, name, user_id, created_at, updated_at
                 FROM findings
                 WHERE user_id = ?
-                ORDERBY name
+                ORDER BY name
                 """,
                 findingRowMapper,
                 userId

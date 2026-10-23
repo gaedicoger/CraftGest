@@ -37,7 +37,7 @@ public class ProductCollectionRepository {
                 SELECT id, name, user_id, created_at, updated_at
                 FROM collections
                 WHERE user_id = ?
-                ORDERBY name
+                ORDER BY name
                 """,
                 productCollectionRowMapper,
                 userId

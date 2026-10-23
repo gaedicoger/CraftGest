@@ -37,7 +37,7 @@ public class MaterialRepository {
                 SELECT id, name, user_id, created_at, updated_at
                 FROM materials
                 WHERE user_id = ?
-                ORDERBY name
+                ORDER BY name
                 """,
                 materialRowMapper,
                 userId
