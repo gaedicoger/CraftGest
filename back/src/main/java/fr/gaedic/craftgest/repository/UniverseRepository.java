@@ -1,5 +1,6 @@
 package fr.gaedic.craftgest.repository;
 
+import fr.gaedic.craftgest.model.Color;
 import fr.gaedic.craftgest.model.Universe;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UniverseRepository {
@@ -42,6 +44,19 @@ public class UniverseRepository {
                 universeRowMapper,
                 userId
         );
+    }
+
+    public Optional<Universe> findById(Integer id , Integer userId) {
+        return jdbcTemplate.query(
+                """
+                SELECT id, name, user_id, created_at, updated_at
+                       FROM universes
+                       WHERE id = ? AND user_id = ?
+                """,
+                universeRowMapper,
+                id,
+                userId
+        ).stream().findFirst();
     }
 
     //Create:

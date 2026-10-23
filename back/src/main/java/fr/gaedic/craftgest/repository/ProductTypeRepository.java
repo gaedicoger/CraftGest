@@ -1,5 +1,6 @@
 package fr.gaedic.craftgest.repository;
 
+import fr.gaedic.craftgest.model.Color;
 import fr.gaedic.craftgest.model.ProductType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ProductTypeRepository {
@@ -69,6 +71,19 @@ public class ProductTypeRepository {
 
         productType.setId(keyHolder.getKey().intValue());
         return productType;
+    }
+
+    public Optional<ProductType> findById(Integer id , Integer userId) {
+        return jdbcTemplate.query(
+                """
+                SELECT id, name, user_id, created_at, updated_at
+                       FROM types
+                       WHERE id = ? AND user_id = ?
+                """,
+                productTypeRowMapper,
+                id,
+                userId
+        ).stream().findFirst();
     }
 
     //Update:

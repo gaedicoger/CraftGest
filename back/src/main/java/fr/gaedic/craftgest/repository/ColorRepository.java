@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ColorRepository {
@@ -44,6 +45,19 @@ public class ColorRepository {
                 colorRowMapper,                          // notre RowMapper, réutilisé ici
                 userId                                   // remplace le ? dans le SQL
         );
+    }
+
+    public Optional<Color> findById(Integer id , Integer userId) {
+        return jdbcTemplate.query(
+                """
+                SELECT id, name, user_id, created_at, updated_at
+                       FROM colors
+                       WHERE id = ? AND user_id = ?
+                """,
+                colorRowMapper,
+                id,
+                userId
+        ).stream().findFirst();
     }
 
     public Color save(Color color) {
