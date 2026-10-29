@@ -85,10 +85,10 @@ public class PictureRepository {
                 UPDATE pictures p
                 SET url = ?, position = ?, updated_at = ?
                 FROM products pr
-                WHERE pr.id= p.product_id AND p.id = ?, p.user_id = ?
+                WHERE pr.id= p.product_id AND p.id = ? pr.user_id = ?
                 """,
                 picture.getUrl(),
-                picture.getPosition();
+                picture.getPosition(),
                 Timestamp.valueOf(LocalDateTime.now()),
                 id,
                 userId
