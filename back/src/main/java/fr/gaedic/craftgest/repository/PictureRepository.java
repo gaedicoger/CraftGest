@@ -1,7 +1,5 @@
 package fr.gaedic.craftgest.repository;
 
-import fr.gaedic.craftgest.model.Color;
-import fr.gaedic.craftgest.model.Material;
 import fr.gaedic.craftgest.model.Picture;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class PictureRepository {
@@ -27,27 +24,28 @@ public class PictureRepository {
 //RowMapper:
     private final RowMapper<Picture> pictureRowMapper = (rs, rowNum) -> {
         Picture picture = new Picture();
-        picture.setId(rs.getInt("id"));                                           // 2. on lit "id" dans la ligne, puis on le range dans l'objet
-        picture.setUrl(rs.getString("url"));                                    //    texte → getString
-        picture.setPosition(rs.getInt("position"));                                  //    nom SQL en snake_case entre guillemets
-        picture.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());    //    date : Timestamp → LocalDateTime
+        picture.setId(rs.getInt("id"));
+        picture.setUrl(rs.getString("url"));
+        picture.setPosition(rs.getInt("position"));
+        picture.setProductId(rs.getInt("product_id"));
+        picture.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         picture.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
         return picture;
 };
     //Read: Sur une seule photo liée au produit :
-    public Optional<Picture> findByProductId(Integer productId , Integer userId) {
+    public List<Picture> findByProductId(Integer productId , Integer userId) {
         return jdbcTemplate.query(
                 """
                 SELECT p.id, p.url, p.position, p.product_id, p.created_at, p.updated_at
                        FROM pictures p
                        JOIN products pr ON pr.id = p.product_id
-                       WHERE p.productId = ? AND pr.user_id = ?
+                       WHERE p.product_id = ? AND pr.user_id = ?
                        ORDER BY position
                 """,
                 pictureRowMapper,
                 productId,
                 userId
-        ).stream().findFirst();
+        );
     }
 
     //Create:
@@ -85,7 +83,7 @@ public class PictureRepository {
                 UPDATE pictures p
                 SET url = ?, position = ?, updated_at = ?
                 FROM products pr
-                WHERE pr.id= p.product_id AND p.id = ? pr.user_id = ?
+                WHERE pr.id= p.product_id AND p.id = ? AND pr.user_id = ?
                 """,
                 picture.getUrl(),
                 picture.getPosition(),
