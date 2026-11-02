@@ -90,6 +90,17 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>3.10.4</version>
+				<configuration>
+					<java>
+						<palantirJavaFormat/>     <!-- 4 espaces -->
+						<removeUnusedImports/>    <!-- supprime les imports inutiles (gris) -->
+					</java>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
