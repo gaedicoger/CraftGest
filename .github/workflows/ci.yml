@@ -1,0 +1,56 @@
+# Intégration continue : vérifie le back à chaque push et pull request
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  back:
+    name: Back (format + tests)
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: back
+
+    # Identifiants de la base de test, utilisés par application.yaml
+    env:
+      POSTGRES_USER: craftgest_test
+      POSTGRES_PASSWORD: craftgest_test
+      POSTGRES_DB: craftgest_db
+
+    # Base PostgreSQL jetable, sur le même port qu'en local (5433)
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: craftgest_test
+          POSTGRES_PASSWORD: craftgest_test
+          POSTGRES_DB: craftgest_db
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U craftgest_test -d craftgest_db"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v5
+
+      - name: Installer Java 25
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "25"
+          cache: maven
+
+      - name: Vérifier le format du code (Spotless)
+        run: ./mvnw -B spotless:check
+
+      - name: Compiler et lancer les tests
+        run: ./mvnw -B verify
