@@ -67,7 +67,19 @@ public class SaleRepository{
                 userId
         );
     }
-
+    //Read : Liste des ventes par evenements:
+    public List<Sale> findByEventId(Integer eventId, Integer userId) {
+        return jdbcTemplate.query (
+                """
+                SELECT s.id, s.sale_date, s.quantity, s.price_paid, s.price_catalog, s.paid_type, s.event_id, s.product_id, s.created_at, s.updated_at
+                FROM sales s
+                JOIN events e ON s.event_id = e.id
+                WHERE e.id = ? AND e.user_id = ?
+                ORDER BY s.sale_date DESC
+                """,
+                saleRowMapper, eventId, userId
+        );
+    }
     //Create:
     public Sale save(Sale sale) {
         LocalDateTime now = LocalDateTime.now();
