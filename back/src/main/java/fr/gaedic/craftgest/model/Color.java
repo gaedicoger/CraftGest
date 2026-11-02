@@ -15,19 +15,19 @@ public class Color {
 
     private LocalDateTime updatedAt;
 
-    //Constructeur : Permet de créer un objet color.
+    // Constructeur : Permet de créer un objet color.
     // Le repository l'utilisera pour créer un objet color pour chaque ligne lue en base
     public Color() {}
 
-    //Getters et setters : Les attribuent de ma classe sont privés, ça permet d'avoir des accès contrôlés
+    // Getters et setters : Les attribuent de ma classe sont privés, ça permet d'avoir des accès contrôlés
     // pour lire ou modifier les attributs depuis l'extérieur de la classe.
 
-    //Getters: Permet de lire un attribut depuis l'extérieur de la classe
+    // Getters: Permet de lire un attribut depuis l'extérieur de la classe
     public Integer getId() {
         return id;
     }
 
-    //Setters: Modifient un attribut depuis l'exterieur de la class.
+    // Setters: Modifient un attribut depuis l'exterieur de la class.
     public void setId(Integer id) {
         this.id = id;
     }

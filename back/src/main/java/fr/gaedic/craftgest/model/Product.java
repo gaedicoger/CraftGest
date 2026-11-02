@@ -36,10 +36,10 @@ public class Product {
 
     private LocalDateTime updatedAt;
 
-    //Constructeur vide:
+    // Constructeur vide:
     public Product() {}
 
-    //Getters et setters:
+    // Getters et setters:
     public Integer getId() {
         return id;
     }

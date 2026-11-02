@@ -18,14 +18,14 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    //Constructeur : Permet de créer un objet user.
+    // Constructeur : Permet de créer un objet user.
     // Le repository l'utilisera pour créer un objet user pour chaque ligne lue en base
     public User() {}
 
-    //Getters et setters : Les attribuent de ma classe sont privés, ça permet d'avoir des accès contrôlés
+    // Getters et setters : Les attribuent de ma classe sont privés, ça permet d'avoir des accès contrôlés
     // pour lire ou modifier les attributs depuis l'extérieur de la classe.
 
-    //Getters: Permet de lire un attribut depuis l'extérieur de la classe
+    // Getters: Permet de lire un attribut depuis l'extérieur de la classe
     public Integer getId() {
         return id;
     }
@@ -70,7 +70,7 @@ public class User {
         return updatedAt;
     }
 
-    //Setters: Modifient un attribut depuis l'exterieur de la class.
+    // Setters: Modifient un attribut depuis l'exterieur de la class.
     public void setId(Integer id) {
         this.id = id;
     }
@@ -114,5 +114,4 @@ public class User {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-
 }

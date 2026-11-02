@@ -1,29 +1,30 @@
 package fr.gaedic.craftgest.repository;
 
 import fr.gaedic.craftgest.model.Place;
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
 @Repository
 public class PlaceRepository {
-    private final JdbcTemplate jdbcTemplate; //Outil SQL
+    private final JdbcTemplate jdbcTemplate; // Outil SQL
 
-    //Rowmapper :
+    // Rowmapper :
     private final RowMapper<Place> placeRowMapper = (rs, rowNum) -> {
         Place place = new Place();
         place.setId(rs.getInt("id"));
         place.setName(rs.getString("name"));
         place.setType(rs.getString("type"));
-        place.setDiscountRate(rs.getObject("discount_rate", Integer.class)); //Ici on ne met pas de getInt car la colonne peut être null et du coup ç peut planter
+        place.setDiscountRate(rs.getObject(
+                "discount_rate",
+                Integer.class)); // Ici on ne met pas de getInt car la colonne peut être null et du coup ç peut planter
         place.setCommissionRate(rs.getObject("commission_rate", Integer.class));
         place.setUserId(rs.getInt("user_id"));
         place.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
@@ -31,36 +32,27 @@ public class PlaceRepository {
         return place;
     };
 
-    //Constructeur:
+    // Constructeur:
     public PlaceRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    //Read :
+    // Read :
     public List<Place> findByUserId(Integer userId) {
-        return jdbcTemplate.query(
-                """
+        return jdbcTemplate.query("""
                 SELECT id, name, type, discount_rate, commission_rate, user_id, created_at, updated_at
                 FROM places
                 WHERE user_id = ?
                 ORDER BY name
-                """,
-                placeRowMapper,
-                userId
-        );
+                """, placeRowMapper, userId);
     }
 
-    public Optional<Place> findById(Integer id , Integer userId) {
-        return jdbcTemplate.query(
-                """
+    public Optional<Place> findById(Integer id, Integer userId) {
+        return jdbcTemplate.query("""
                 SELECT id, name, type, discount_rate, commission_rate, user_id, created_at, updated_at
                        FROM places
                        WHERE id = ? AND user_id = ?
-                """,
-                placeRowMapper,
-                id,
-                userId
-        ).stream().findFirst();
+                """, placeRowMapper, id, userId).stream().findFirst();
     }
 
     public Place save(Place place) {
@@ -70,23 +62,24 @@ public class PlaceRepository {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(
-                    """
+        jdbcTemplate.update(
+                connection -> {
+                    PreparedStatement ps = connection.prepareStatement(
+                            """
                     INSERT INTO places (name, type, discount_rate, commission_rate, user_id, created_at, updated_at)
                     VALUES (?, ?, ?, ?, ?, ?, ?)
-                    """,
-                    new String[]{"id"}                    // "renvoie-moi la colonne id"
-            );
-            ps.setString(1, place.getName());
-            ps.setString(2, place.getType());
-            ps.setObject(3, place.getDiscountRate());
-            ps.setObject(4, place.getCommissionRate());
-            ps.setInt(5, place.getUserId());
-            ps.setTimestamp(6, Timestamp.valueOf(place.getCreatedAt()));   // LocalDateTime → Timestamp
-            ps.setTimestamp(7, Timestamp.valueOf(place.getUpdatedAt()));
-            return ps;
-        }, keyHolder);
+                    """, new String[] {"id"} // "renvoie-moi la colonne id"
+                            );
+                    ps.setString(1, place.getName());
+                    ps.setString(2, place.getType());
+                    ps.setObject(3, place.getDiscountRate());
+                    ps.setObject(4, place.getCommissionRate());
+                    ps.setInt(5, place.getUserId());
+                    ps.setTimestamp(6, Timestamp.valueOf(place.getCreatedAt())); // LocalDateTime → Timestamp
+                    ps.setTimestamp(7, Timestamp.valueOf(place.getUpdatedAt()));
+                    return ps;
+                },
+                keyHolder);
 
         place.setId(keyHolder.getKey().intValue());
         return place;
@@ -105,17 +98,13 @@ public class PlaceRepository {
                 place.getCommissionRate(),
                 Timestamp.valueOf(LocalDateTime.now()),
                 id,
-                userId
-        );
+                userId);
     }
+
     public int deleteById(Integer id, Integer userId) {
-        return jdbcTemplate.update(
-                """
+        return jdbcTemplate.update("""
                 DELETE FROM places
                 WHERE id = ? AND user_id = ?
-                """,
-                id,
-                userId
-        );
+                """, id, userId);
     }
 }

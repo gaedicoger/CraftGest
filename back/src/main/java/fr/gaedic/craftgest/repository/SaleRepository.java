@@ -1,28 +1,27 @@
 package fr.gaedic.craftgest.repository;
 
 import fr.gaedic.craftgest.model.Sale;
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Repository
-public class SaleRepository{
+public class SaleRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    //Constructeur:
+    // Constructeur:
     public SaleRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    //RowMapper:
+    // RowMapper:
     private final RowMapper<Sale> saleRowMapper = (rs, rowNum) -> {
         Sale sale = new Sale();
         sale.setId(rs.getInt("id"));
@@ -37,50 +36,38 @@ public class SaleRepository{
         sale.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
         return sale;
     };
-    //Read: Liste de toutes les ventes disponibles pour l'utilisateur
+    // Read: Liste de toutes les ventes disponibles pour l'utilisateur
 
     public List<Sale> findByUserId(Integer userId) {
-        return jdbcTemplate.query(
-                """
+        return jdbcTemplate.query("""
                 SELECT s.id, s.sale_date, s.quantity, s.price_paid, s.price_catalog, s.paid_type, s.event_id, s.product_id, s.created_at, s.updated_at
                 FROM sales s
                 JOIN events e ON s.event_id = e.id
                 WHERE e.user_id = ?
                 ORDER BY s.sale_date DESC
-                """,
-                saleRowMapper,
-                userId
-        );
+                """, saleRowMapper, userId);
     }
     // Read : Liste des ventes par produits
-    public List<Sale> findByProductId(Integer productId , Integer userId) {
-        return jdbcTemplate.query(
-                """
+    public List<Sale> findByProductId(Integer productId, Integer userId) {
+        return jdbcTemplate.query("""
                 SELECT s.id, s.sale_date, s.quantity, s.price_paid, s.price_catalog, s.paid_type, s.event_id, s.product_id, s.created_at, s.updated_at
                 FROM sales s
                 JOIN events e ON s.event_id = e.id
                 WHERE s.product_id = ? AND e.user_id = ?
                 ORDER BY s.sale_date DESC
-                """,
-                saleRowMapper,
-                productId,
-                userId
-        );
+                """, saleRowMapper, productId, userId);
     }
-    //Read : Liste des ventes par evenements:
+    // Read : Liste des ventes par evenements:
     public List<Sale> findByEventId(Integer eventId, Integer userId) {
-        return jdbcTemplate.query (
-                """
+        return jdbcTemplate.query("""
                 SELECT s.id, s.sale_date, s.quantity, s.price_paid, s.price_catalog, s.paid_type, s.event_id, s.product_id, s.created_at, s.updated_at
                 FROM sales s
                 JOIN events e ON s.event_id = e.id
                 WHERE e.id = ? AND e.user_id = ?
                 ORDER BY s.sale_date DESC
-                """,
-                saleRowMapper, eventId, userId
-        );
+                """, saleRowMapper, eventId, userId);
     }
-    //Create:
+    // Create:
     public Sale save(Sale sale) {
         LocalDateTime now = LocalDateTime.now();
         sale.setCreatedAt(now);
@@ -88,31 +75,30 @@ public class SaleRepository{
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(
-                    """
+        jdbcTemplate.update(
+                connection -> {
+                    PreparedStatement ps = connection.prepareStatement("""
                         INSERT INTO sales (sale_date, quantity, price_paid, price_catalog, paid_type, event_id, product_id, created_at, updated_at)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                        """,
-                    new String[]{"id"}
-            );
-            ps.setObject(1, sale.getSaleDate());
-            ps.setInt(2, sale.getQuantity());
-            ps.setBigDecimal(3, sale.getPricePaid());
-            ps.setBigDecimal(4, sale.getPriceCatalog());
-            ps.setString(5, sale.getPaidType());
-            ps.setInt(6,sale.getEventId());
-            ps.setInt(7,sale.getProductId());
-            ps.setTimestamp(8, Timestamp.valueOf(sale.getCreatedAt()));
-            ps.setTimestamp(9,Timestamp.valueOf(sale.getUpdatedAt()));
-            return ps;
-        }, keyHolder);
+                        """, new String[] {"id"});
+                    ps.setObject(1, sale.getSaleDate());
+                    ps.setInt(2, sale.getQuantity());
+                    ps.setBigDecimal(3, sale.getPricePaid());
+                    ps.setBigDecimal(4, sale.getPriceCatalog());
+                    ps.setString(5, sale.getPaidType());
+                    ps.setInt(6, sale.getEventId());
+                    ps.setInt(7, sale.getProductId());
+                    ps.setTimestamp(8, Timestamp.valueOf(sale.getCreatedAt()));
+                    ps.setTimestamp(9, Timestamp.valueOf(sale.getUpdatedAt()));
+                    return ps;
+                },
+                keyHolder);
 
         sale.setId(keyHolder.getKey().intValue());
         return sale;
     }
 
-    //Update:
+    // Update:
     public int update(Integer id, Integer userId, Sale sale) {
         return jdbcTemplate.update(
                 """
@@ -130,20 +116,15 @@ public class SaleRepository{
                 sale.getProductId(),
                 Timestamp.valueOf(LocalDateTime.now()),
                 userId,
-                id
-        );
+                id);
     }
 
-    //Delete:
+    // Delete:
     public int deleteById(Integer id, Integer userId) {
-        return jdbcTemplate.update(
-                """
+        return jdbcTemplate.update("""
                 DELETE FROM sales s
                 USING events e
                 WHERE e.id = s.event_id AND s.id = ? AND e.user_id = ?
-                """,
-                id,
-                userId
-        );
+                """, id, userId);
     }
 }

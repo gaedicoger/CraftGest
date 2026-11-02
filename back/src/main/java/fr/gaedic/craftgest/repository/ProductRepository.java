@@ -1,29 +1,27 @@
 package fr.gaedic.craftgest.repository;
 
 import fr.gaedic.craftgest.model.Product;
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.time.LocalDate;
-import java.util.Optional;
-
 @Repository
 public class ProductRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    //Constructeur:
+    // Constructeur:
     public ProductRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    //RowMapper :
+    // RowMapper :
     private final RowMapper<Product> productRowMapper = (rs, rowNum) -> {
         Product product = new Product();
         product.setId(rs.getInt("id"));
@@ -45,33 +43,30 @@ public class ProductRepository {
         return product;
     };
 
-    // Read : Afficher une liste de tous les produits // A revoir au moment de la création de l'écran affichage au front.
+    // Read : Afficher une liste de tous les produits // A revoir au moment de la création de l'écran affichage au
+    // front.
 
     public List<Product> findByUserId(Integer userId) {
-        return jdbcTemplate.query(
-                """
+        return jdbcTemplate.query("""
                 SELECT p.id, p.name, p.code_ref, p.description, p.price, p.cost_material, p.size, p.stock, p.is_visible_site, p.archive, p.user_id, p.type_id, p.collection_id, p.finding_id, p.created_at, p.updated_at
                 FROM products p
                 WHERE p.user_id = ?
                 ORDER BY p.created_at DESC
-                """, productRowMapper,userId
-        );
+                """, productRowMapper, userId);
     }
 
-    //Read: afficher un produit en particulier
+    // Read: afficher un produit en particulier
 
-    public Optional<Product> findById (Integer productId, Integer userId) {
-        return jdbcTemplate.query(
-                """
+    public Optional<Product> findById(Integer productId, Integer userId) {
+        return jdbcTemplate.query("""
                SELECT p.id, p.name, p.code_ref, p.description, p.price, p.cost_material, p.size, p.stock, p.is_visible_site, p.archive, p.user_id, p.type_id, p.collection_id, p.finding_id, p.created_at, p.updated_at
                FROM products p
                WHERE p.user_id = ? AND p.id = ?
-               """,
-                productRowMapper, userId, productId
-       ).stream().findFirst();
-   }
+               """, productRowMapper, userId, productId).stream()
+                .findFirst();
+    }
 
-   //Create: Créer un nouveau produit
+    // Create: Créer un nouveau produit
 
     public Product save(Product product) {
         LocalDateTime now = LocalDateTime.now();
@@ -80,37 +75,36 @@ public class ProductRepository {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update( connection -> {
-            PreparedStatement ps =connection.prepareStatement(
-                    """
+        jdbcTemplate.update(
+                connection -> {
+                    PreparedStatement ps = connection.prepareStatement("""
                INSERT INTO products (name, code_ref, description, price, cost_material, size, stock, is_visible_site, archive, user_id, type_id, collection_id, finding_id, created_at, updated_at)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-               """,
-                    new String[]{"id"}
-            );
-            ps.setString(1, product.getName());
-            ps.setString(2, product.getCodeRef());
-            ps.setString(3, product.getDescription());
-            ps.setBigDecimal(4, product.getPrice());
-            ps.setBigDecimal(5, product.getCostMaterial());
-            ps.setString(6, product.getSize());
-            ps.setInt(7, product.getStock());
-            ps.setBoolean(8, product.getVisibleSite());
-            ps.setBoolean(9, product.getArchive());
-            ps.setInt(10, product.getUserId());
-            ps.setInt(11, product.getTypeId());
-            ps.setObject(12, product.getCollectionId());
-            ps.setObject(13, product.getFindingId());
-            ps.setTimestamp(14, Timestamp.valueOf(product.getCreatedAt()));
-            ps.setTimestamp(15, Timestamp.valueOf(product.getUpdatedAt()));
-            return ps;
-        }, keyHolder);
+               """, new String[] {"id"});
+                    ps.setString(1, product.getName());
+                    ps.setString(2, product.getCodeRef());
+                    ps.setString(3, product.getDescription());
+                    ps.setBigDecimal(4, product.getPrice());
+                    ps.setBigDecimal(5, product.getCostMaterial());
+                    ps.setString(6, product.getSize());
+                    ps.setInt(7, product.getStock());
+                    ps.setBoolean(8, product.getVisibleSite());
+                    ps.setBoolean(9, product.getArchive());
+                    ps.setInt(10, product.getUserId());
+                    ps.setInt(11, product.getTypeId());
+                    ps.setObject(12, product.getCollectionId());
+                    ps.setObject(13, product.getFindingId());
+                    ps.setTimestamp(14, Timestamp.valueOf(product.getCreatedAt()));
+                    ps.setTimestamp(15, Timestamp.valueOf(product.getUpdatedAt()));
+                    return ps;
+                },
+                keyHolder);
 
         product.setId(keyHolder.getKey().intValue());
         return product;
     }
 
-    //Update: Mettre une produit à jour
+    // Update: Mettre une produit à jour
 
     public int update(Integer id, Integer userId, Product product) {
         return jdbcTemplate.update(
@@ -136,13 +130,11 @@ public class ProductRepository {
                 id);
     }
 
-    //Delete :
+    // Delete :
     public int deleteById(Integer id, Integer userId) {
-        return jdbcTemplate.update(
-                """
+        return jdbcTemplate.update("""
                         DELETE FROM products
                         WHERE user_id= ? AND id = ?
-                        """,
-                userId, id );
+                        """, userId, id);
     }
 }
