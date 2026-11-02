@@ -12,6 +12,16 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Accès aux produits en base, et à leurs couleurs, matériaux et univers.
+ *
+ * <p>Les lectures, modifications et suppressions filtrent par {@code userId} : chaque utilisateur
+ * n'accède qu'à ses propres produits. Les méthodes qui renvoient un {@code int} donnent le
+ * nombre de lignes modifiées (0 si l'élément n'existe pas ou appartient à un autre utilisateur).
+ *
+ * <p>Exception : {@code addColor}, {@code addMaterial} et {@code addUniverse} ne vérifient pas
+ * que le produit appartient à l'utilisateur. Le service doit le vérifier avant de les appeler.
+ */
 @Repository
 public class ProductRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -105,7 +115,6 @@ public class ProductRepository {
     }
 
     // Update: Mettre une produit à jour
-
     public int update(Integer id, Integer userId, Product product) {
         return jdbcTemplate.update(
                 """
@@ -155,6 +164,7 @@ public class ProductRepository {
                 """, Integer.class, productId, userId);
     }
 
+    // le service doit vérifier avant que le produit ET la couleur appartiennent à l'utilisateur
     public int addColor(Integer productId, Integer colorId) {
         return jdbcTemplate.update("""
                 INSERT INTO product_colors (product_id, color_id)
@@ -181,6 +191,7 @@ public class ProductRepository {
                 """, Integer.class, productId, userId);
     }
 
+    // le service doit vérifier avant que le produit ET la matière appartiennent à l'utilisateur
     public int addMaterial(Integer productId, Integer materialId) {
         return jdbcTemplate.update("""
                 INSERT INTO product_materials (product_id, material_id)
@@ -207,6 +218,7 @@ public class ProductRepository {
                 """, Integer.class, productId, userId);
     }
 
+    // le service doit vérifier avant que le produit ET l'univers appartiennent à l'utilisateur
     public int addUniverse(Integer productId, Integer universeId) {
         return jdbcTemplate.update("""
                 INSERT INTO product_universes (product_id, universe_id)

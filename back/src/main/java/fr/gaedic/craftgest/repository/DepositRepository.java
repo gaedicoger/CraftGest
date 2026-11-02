@@ -13,6 +13,17 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 // deposits n'a pas de user_id : le propriétaire se vérifie par jointure avec events (events.user_id)
+/**
+ * Accès aux dépôts-ventes en base.
+ *
+ * <p>Il n'y a pas de {@code user_id} dans cette table : les lectures, modifications et
+ * suppressions vérifient l'utilisateur à travers l'événement ({@code userId}). {@code update} et
+ * {@code deleteById} renvoient le nombre de lignes modifiées (0 si l'élément n'existe pas
+ * ou appartient à un autre utilisateur).
+ *
+ * <p>{@code save} ne vérifie pas que l'événement appartient à l'utilisateur. Le service doit le vérifier
+ * avant de l'appeler.
+ */
 @Repository
 public class DepositRepository {
     private final JdbcTemplate jdbcTemplate;

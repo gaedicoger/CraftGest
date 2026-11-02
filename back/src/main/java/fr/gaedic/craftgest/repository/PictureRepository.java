@@ -11,6 +11,17 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Accès aux photos de produits en base.
+ *
+ * <p>Il n'y a pas de {@code user_id} dans cette table : les lectures, modifications et
+ * suppressions vérifient l'utilisateur à travers le produit ({@code userId}). {@code update} et
+ * {@code deleteById} renvoient le nombre de lignes modifiées (0 si l'élément n'existe pas
+ * ou appartient à un autre utilisateur).
+ *
+ * <p>{@code save} ne vérifie pas que le produit appartient à l'utilisateur. Le service doit le vérifier
+ * avant de l'appeler.
+ */
 @Repository
 public class PictureRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -42,7 +53,7 @@ public class PictureRepository {
                 """, pictureRowMapper, productId, userId);
     }
 
-    // Create:
+    // Create: le service doit vérifier avant que le produit appartient à l'utilisateur
     public Picture save(Picture picture) {
         LocalDateTime now = LocalDateTime.now();
         picture.setCreatedAt(now);

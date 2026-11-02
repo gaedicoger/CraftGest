@@ -12,6 +12,17 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Accès aux ventes en base.
+ *
+ * <p>Il n'y a pas de {@code user_id} dans cette table : les lectures, modifications et
+ * suppressions vérifient l'utilisateur à travers l'événement ({@code userId}). {@code update} et
+ * {@code deleteById} renvoient le nombre de lignes modifiées (0 si l'élément n'existe pas
+ * ou appartient à un autre utilisateur).
+ *
+ * <p>{@code save} ne vérifie pas que l'événement appartient à l'utilisateur. Le service doit le vérifier
+ * avant de l'appeler.
+ */
 @Repository
 public class SaleRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -67,7 +78,7 @@ public class SaleRepository {
                 ORDER BY s.sale_date DESC
                 """, saleRowMapper, eventId, userId);
     }
-    // Create:
+    // Create: le service doit vérifier avant que l'événement ET le produit appartiennent à l'utilisateur
     public Sale save(Sale sale) {
         LocalDateTime now = LocalDateTime.now();
         sale.setCreatedAt(now);

@@ -12,6 +12,14 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Accès aux comptes utilisateurs en base.
+ *
+ * <p>Contrairement aux autres repositories, les méthodes ne filtrent pas par utilisateur. Le
+ * contrôle d'accès (admin, ou utilisateur connecté qui agit sur son propre compte) se fait
+ * dans le service. {@code update} et {@code deleteById} renvoient le nombre de lignes
+ * modifiées (0 si l'utilisateur n'existe pas).
+ */
 @Repository
 public class UserRepository {
     private final JdbcTemplate jdbcTemplate;

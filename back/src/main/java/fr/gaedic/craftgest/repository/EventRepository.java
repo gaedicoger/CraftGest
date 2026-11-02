@@ -13,6 +13,13 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Accès aux événements en base.
+ *
+ * <p>Les lectures, modifications et suppressions filtrent par {@code userId} : chaque utilisateur
+ * n'accède qu'à ses propres événements. {@code update} et {@code deleteById} renvoient le nombre
+ * de lignes modifiées (0 si l'élément n'existe pas ou appartient à un autre utilisateur).
+ */
 @Repository
 public class EventRepository {
     private final JdbcTemplate jdbcTemplate;
