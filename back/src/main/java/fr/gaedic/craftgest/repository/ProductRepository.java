@@ -137,4 +137,89 @@ public class ProductRepository {
                         WHERE user_id= ? AND id = ?
                         """, userId, id);
     }
+
+    // Tables de liaison (product_colors, product_materials, product_universes) :
+    // une ligne = un produit relié à une couleur / une matière / un univers.
+    // Lecture et suppression vérifient le propriétaire par jointure avec products.
+    // Ajout : le service doit vérifier avant que le produit ET la couleur (matière, univers) appartiennent à
+    // l'utilisateur.
+    // Les liaisons sont supprimées toutes seules avec le produit (ON DELETE CASCADE dans le script V1).
+
+    // Couleurs : les ids des couleurs d'un produit
+    public List<Integer> findColorIdsByProductId(Integer productId, Integer userId) {
+        return jdbcTemplate.queryForList("""
+                SELECT pc.color_id
+                FROM product_colors pc
+                JOIN products p ON p.id = pc.product_id
+                WHERE pc.product_id = ? AND p.user_id = ?
+                """, Integer.class, productId, userId);
+    }
+
+    public int addColor(Integer productId, Integer colorId) {
+        return jdbcTemplate.update("""
+                INSERT INTO product_colors (product_id, color_id)
+                VALUES (?, ?)
+                """, productId, colorId);
+    }
+
+    public int removeColor(Integer productId, Integer colorId, Integer userId) {
+        return jdbcTemplate.update("""
+                DELETE FROM product_colors pc
+                USING products p
+                WHERE p.id = pc.product_id
+                  AND pc.product_id = ? AND pc.color_id = ? AND p.user_id = ?
+                """, productId, colorId, userId);
+    }
+
+    // Matières
+    public List<Integer> findMaterialIdsByProductId(Integer productId, Integer userId) {
+        return jdbcTemplate.queryForList("""
+                SELECT pm.material_id
+                FROM product_materials pm
+                JOIN products p ON p.id = pm.product_id
+                WHERE pm.product_id = ? AND p.user_id = ?
+                """, Integer.class, productId, userId);
+    }
+
+    public int addMaterial(Integer productId, Integer materialId) {
+        return jdbcTemplate.update("""
+                INSERT INTO product_materials (product_id, material_id)
+                VALUES (?, ?)
+                """, productId, materialId);
+    }
+
+    public int removeMaterial(Integer productId, Integer materialId, Integer userId) {
+        return jdbcTemplate.update("""
+                DELETE FROM product_materials pm
+                USING products p
+                WHERE p.id = pm.product_id
+                  AND pm.product_id = ? AND pm.material_id = ? AND p.user_id = ?
+                """, productId, materialId, userId);
+    }
+
+    // Univers
+    public List<Integer> findUniverseIdsByProductId(Integer productId, Integer userId) {
+        return jdbcTemplate.queryForList("""
+                SELECT pu.universe_id
+                FROM product_universes pu
+                JOIN products p ON p.id = pu.product_id
+                WHERE pu.product_id = ? AND p.user_id = ?
+                """, Integer.class, productId, userId);
+    }
+
+    public int addUniverse(Integer productId, Integer universeId) {
+        return jdbcTemplate.update("""
+                INSERT INTO product_universes (product_id, universe_id)
+                VALUES (?, ?)
+                """, productId, universeId);
+    }
+
+    public int removeUniverse(Integer productId, Integer universeId, Integer userId) {
+        return jdbcTemplate.update("""
+                DELETE FROM product_universes pu
+                USING products p
+                WHERE p.id = pu.product_id
+                  AND pu.product_id = ? AND pu.universe_id = ? AND p.user_id = ?
+                """, productId, universeId, userId);
+    }
 }
