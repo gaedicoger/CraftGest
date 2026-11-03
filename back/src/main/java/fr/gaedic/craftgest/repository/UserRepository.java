@@ -54,13 +54,23 @@ public class UserRepository {
                 ORDER BY created_at DESC
                 """, userRowMapper);
     }
-    // Read: Afficher les infos d'un user:
+    // Read: Récupérer les infos d'un user:
     public Optional<User> findById(Integer id) {
         return jdbcTemplate.query("""
                         SELECT id, pseudo, mail, password_hash, business, slug, role, status, mail_verified, created_at, updated_at
                         FROM users
                         WHERE id = ?
                         """, userRowMapper, id).stream().findFirst();
+    }
+
+    //Read : Récupérer les infos d'un user depuis son mail:
+    public Optional<User> findByMail(String mail) {
+        return jdbcTemplate.query(
+                """
+                SELECT id, pseudo, mail, password_hash, business, slug, role, status, mail_verified, created_at, updated_at
+                FROM users
+                WHERE mail = ? 
+                        """, userRowMapper, mail).stream().findFirst();
     }
 
     // Create: Créer un nouvel utilisateur (inscription)
