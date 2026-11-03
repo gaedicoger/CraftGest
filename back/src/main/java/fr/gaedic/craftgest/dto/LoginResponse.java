@@ -1,4 +1,4 @@
 package fr.gaedic.craftgest.dto;
 
-public record LoginResponse() {
+public record LoginResponse(String token) {
 }
