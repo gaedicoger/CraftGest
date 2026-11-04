@@ -63,13 +63,12 @@ public class UserRepository {
                         """, userRowMapper, id).stream().findFirst();
     }
 
-    //Read : Récupérer les infos d'un user depuis son mail:
+    // Read : Récupérer les infos d'un user depuis son mail:
     public Optional<User> findByMail(String mail) {
-        return jdbcTemplate.query(
-                """
+        return jdbcTemplate.query("""
                 SELECT id, pseudo, mail, password_hash, business, slug, role, status, mail_verified, created_at, updated_at
                 FROM users
-                WHERE mail = ? 
+                WHERE mail = ?
                         """, userRowMapper, mail).stream().findFirst();
     }
 
