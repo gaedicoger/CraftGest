@@ -18,7 +18,7 @@ public class JwtService {
 
     // Constructeur:
     public JwtService(@Value("${jwt.secret}") String secret, //Récupére le JWT secret à partir du fichier application.yaml
-                      @Value("${jwt.expiration}" long expiration) { //Idem pour le temps d'expiration
+                      @Value("${jwt.expiration}") long expiration) { //Idem pour le temps d'expiration
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)); // Transforme le secret en signature
         this.expiration =expiration;
     }
