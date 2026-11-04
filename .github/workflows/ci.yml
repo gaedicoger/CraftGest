@@ -21,6 +21,7 @@ jobs:
       POSTGRES_USER: craftgest_test
       POSTGRES_PASSWORD: craftgest_test
       POSTGRES_DB: craftgest_db
+      JWT_SECRET: secret-de-test-pour-la-ci-au-moins-32-caracteres
 
     # Base PostgreSQL jetable, sur le même port qu'en local (5433)
     services:
