@@ -18,6 +18,6 @@ public class WebConfig implements WebMvcConfigurer { // Je veux configurer le fo
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor) // Méthode nommée pour indiquer quelles routes vérifier
                 .addPathPatterns("/api/**") // devant ttes les routes qui ont ce pattern
-                .excludePathPatterns("/api/auth/login"); // Sauf la route login
+                .excludePathPatterns("/api/auth/login", "/api/auth/logout"); // Sauf la route login et la route logout
     }
 }
