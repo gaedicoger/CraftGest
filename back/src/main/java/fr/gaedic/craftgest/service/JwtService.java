@@ -1,6 +1,7 @@
 package fr.gaedic.craftgest.service;
 
 import fr.gaedic.craftgest.model.User;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
@@ -30,5 +31,15 @@ public class JwtService {
                 .expiration(new Date(System.currentTimeMillis() + expiration)) // Expire dans "maintenant + 1h"
                 .signWith(key) // Signature avec la clé secrète
                 .compact(); // Emballe le tout dans une chaîne de caractère
+    }
+
+    public Claims parseToken(String token) {
+        return Jwts.parser() // Prépare un lecteur de token
+                .verifyWith(key) // vérifie la signature avec notre clé
+                .build() // Lecteur prêt
+                .parseSignedClaims(
+                        token) // lit le token et vérifie la signature et la date d'expiration, lance une erreur si faux
+                // ou expiré
+                .getPayload(); // renvoie le contenu : id et role
     }
 }
