@@ -42,4 +42,8 @@ public class JwtService {
                 // ou expiré
                 .getPayload(); // renvoie le contenu : id et role
     }
+
+    public long getExpiration() {
+        return expiration;
+    }
 }
