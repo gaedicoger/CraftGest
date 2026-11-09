@@ -2,13 +2,11 @@ package fr.gaedic.craftgest.controller;
 
 import fr.gaedic.craftgest.dto.LoginRequest;
 import fr.gaedic.craftgest.dto.LoginResponse;
+import fr.gaedic.craftgest.dto.MeResponse;
 import fr.gaedic.craftgest.model.User;
 import fr.gaedic.craftgest.service.AuthService;
 import fr.gaedic.craftgest.service.JwtService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController // Cette classe reçoit des requetes HTTP et renvoie du JSON
 @RequestMapping("/api/auth") // Début de toutes les routes de la classe
@@ -27,5 +25,10 @@ public class AuthController {
         User user = authService.login(request.mail(), request.password());
         String token = jwtService.generateToken(user);
         return new LoginResponse(token);
+    }
+
+    @GetMapping("/me") // la route GET /api/auth/me qui vérifie qui est connecté
+    public MeResponse me(@RequestAttribute("userId") Integer userId, @RequestAttribute("role") String role) {
+        return new MeResponse(userId, role);
     }
 }
